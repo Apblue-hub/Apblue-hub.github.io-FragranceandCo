@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fragrances & Co. E-Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rmh.css">
+    <style>
+        :root {
+            --primary: #9c27b0;
+            --secondary: #e91e63;
+            --accent: #ff9800;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --background: #f6c6ea;
+        }
+        
+        body {
+            background-color: var(--background);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Floating flowers animation */
+        .flower {
+            position: absolute;
+            top: 0;
+            font-size: 24px;
+            opacity: 0.8;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Header styles */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo h1 {
+            color: var(--primary);
+            margin: 0;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 0;
+            display: block;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero section */
+        .hero {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.1) 0%, rgba(233, 30, 99, 0.1) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero p {
+            color: var(--dark);
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+        
+        .shop-now {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+            border: 2px solid var(--primary);
+        }
+        
+        .shop-now:hover {
+            background-color: transparent;
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Products section */
+        .products {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .products h2 {
+            text-align: center;
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .products h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .product {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product h3 {
+            color: var(--dark);
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        .product p {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 10px 0 15px;
+        }
+        
+        .product button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .product button:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Notifications section */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        #notifications {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        #notifications div {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+        
+        footer p {
+            margin: 0;
+        }
+        
+        /* Floating cart icon */
+        .cart-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(156, 39, 176, 0.5);
+            z-index: 90;
+            transition: all 0.3s;
+        }
+        
+        .cart-icon:hover {
+            transform: scale(1.1);
+            background: var(--secondary);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating flowers animation -->
+    <script>
+        function createFlower() {
+            const flower = document.createElement("div");
+            flower.innerText = "🌸";
+            flower.classList.add("flower");
+            
+            // Random position & size
+            flower.style.left = Math.random() * window.innerWidth + "px";
+            flower.style.fontSize = Math.random() * 20 + 20 + "px"; 
+            flower.style.animationDuration = Math.random() * 3 + 2 + "s"; 
+            flower.style.opacity = Math.random() * 0.5 + 0.3;
+    
+            document.body.appendChild(flower);
+    
+            // Remove flower after animation
+            setTimeout(() => {
+                flower.remove();
+            }, 5000);
+        }
+    
+        // Create flowers every 300ms
+        setInterval(createFlower, 300);
+    </script>
+    
+    <!-- Header with navigation -->
+    <header>
+        <div class="logo">
+            <h1>Fragrances & Co.</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="rhm.html">Home</a></li>
+                <li><a href="shop2.html">Shop</a></li>
+                <li><a href="about us.html">About Us</a></li>
+                <li><a href="communtiy.html">Community</a></li>
+                <li><a href="Admin.html">Admin</a></li>
+                <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Discover Your Signature Scent</h2>
+            <p>Luxury fragrances crafted to perfection. Experience the essence of elegance.</p>
+            <a href="shop2.html" class="shop-now">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Featured products -->
+    <section class="products">
+        <h2>Featured Collections</h2>
+        <div class="product-container">
+            <div class="product">
+                <img src="/Users/sultan/Downloads/home.jpeg" alt="Floral Elegance">
+                <div class="product-content">
+                    <h3>Floral Elegance</h3>
+                    <p>1,329.99 ETB</p>
+                    <button onclick="addToCart({
+                        id: 'fe001',
+                        name: 'Floral Elegance', 
+                        price: 1329.99,
+                        image: '/Users/sultan/Downloads/home.jpeg',
+                        description: 'A delicate floral fragrance with notes of jasmine and rose'
+                    })">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product">
+                <img src="/Users/sultan/Downloads/hom2.jpeg" alt="Citrus Zest">
+                <div class="product-content">
+                    <h3>Citrus Zest</h3>
+                    <p>1,049.99 ETB</p>
+                    <button onclick="addToCart({
+                        id: 'cz002',
+                        name: 'Citrus Zest', 
+                        price: 1049.99,
+                        image: '/Users/sultan/Downloads/hom2.jpeg',
+                        description: 'Fresh and zesty citrus fragrance with orange and bergamot notes'
+                    })">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product">
+                <img src="/Users/sultan/Downloads/hom3.jpeg" alt="Woody Mystique">
+                <div class="product-content">
+                    <h3>Woody Mystique</h3>
+                    <p>2,039.99 ETB</p>
+                    <button onclick="addToCart({
+                        id: 'wm003',
+                        name: 'Woody Mystique', 
+                        price: 2039.99,
+                        image: '/Users/sultan/Downloads/hom3.jpeg',
+                        description: 'Rich woody fragrance with sandalwood and patchouli notes'
+                    })">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Notifications section -->
+    <div class="container">
+        <h1>Latest Updates</h1>
+        <div id="notifications"></div>
+    </div>
+    
+    <!-- Floating cart icon -->
+    <a href="cart.html" class="cart-icon">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cart-count">0</span>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Fragrances & Co. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Load existing notifications from localStorage when the page loads
+        window.onload = function() {
+            displayNotifications();
+            updateCartCount();
+        };
+
+        function displayNotifications() {
+            const notificationsDiv = document.getElementById('notifications');
+            notificationsDiv.innerHTML = ''; // Clear current notifications
+            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+          
+            if (notifications.length === 0) {
+                notificationsDiv.innerHTML = '<div>No new updates at this time.</div>';
+                return;
+            }
+            
+            notifications.slice(0, 3).forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.innerHTML = `<i class="fas fa-bell" style="color: var(--accent); margin-right: 10px;"></i> ${notification}`;
+                notificationsDiv.appendChild(notificationElement);
+            });
+        }
+        
+        // Cart functionality
+        
+            // Show sweet alert
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            function addToCart(product) {
+            try {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                
+                // Check if product already exists in cart
+                const existingItemIndex = cart.findIndex(item => item.id === product.id);
+                
+                if (existingItemIndex !== -1) {
+                    // Update quantity if already in cart (max 10)
+                    cart[existingItemIndex].quantity = Math.min((cart[existingItemIndex].quantity || 1) + 1, 10);
+                } else {
+                    // Add new item to cart with quantity 1
+                    cart.push({
+                        ...product,
+                        quantity: 1
+                    });
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                
+                // Show success notification
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                
+                Toast.fire({
+                    icon: 'success',
+                    title: `${product.name} added to cart!`
+                });
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Add to Cart Failed',
+                    text: 'There was a problem adding this item to your cart',
+                });
+            }
+        }
+        
+        // Update cart count display
+        function updateCartCount() {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                let totalItems = 0;
+                
+                cart.forEach(item => {
+                    totalItems += item.quantity || 1;
+                });
+                
+                document.getElementById('cart-count').textContent = totalItems;
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+            }
+        }
+        
+        // Load existing cart count when page loads
+        window.onload = function() {
+            displayNotifications();
+            updateCartCount();
+        };
+            Toast.fire({
+                icon: 'success',
+                title: `${productName} added to cart!`
+            })
+            
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+        // Initialize cart if it doesn't exist
+if (!localStorage.getItem('cart')) {
+    localStorage.setItem('cart', JSON.stringify([]));
+}
+    </script>
+    
+    <!-- SweetAlert for beautiful alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

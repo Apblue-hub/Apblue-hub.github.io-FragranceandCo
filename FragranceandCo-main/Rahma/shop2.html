@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Fragrances & Co.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rmh.css">
+    <style>
+        :root {
+            --primary: #9c27b0;
+            --secondary: #e91e63;
+            --accent: #ff9800;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --background: #fff0f6;
+            --text-light: #777;
+        }
+        
+        body {
+            background-color: var(--background);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Header styles */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo h1 {
+            color: var(--primary);
+            margin: 0;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 0;
+            display: block;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Main shop content */
+        .shop-container {
+            padding: 2rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .shop-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .shop-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .shop-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .shop-description {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Filter and search */
+        .shop-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.2);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .filter-dropdown {
+            position: relative;
+        }
+        
+        .filter-button {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .filter-button:hover {
+            border-color: var(--primary);
+        }
+        
+        .filter-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 200px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .filter-options.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .filter-option {
+            margin-bottom: 10px;
+        }
+        
+        .filter-option:last-child {
+            margin-bottom: 0;
+        }
+        
+        .filter-option label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        /* Product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+        
+        .product-image-container {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-content {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 0 0 0.5rem;
+            font-weight: 600;
+        }
+        
+        .product-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0 0 1rem;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0 0 1rem;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Quick view modal */
+        .quick-view-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .quick-view-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        /* Cart preview */
+        .cart-preview-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .cart-preview {
+            background-color: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(156, 39, 176, 0.5);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .cart-preview:hover {
+            transform: scale(1.1);
+            background-color: var(--secondary);
+            box-shadow: 0 5px 25px rgba(233, 30, 99, 0.6);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .shop-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .filter-dropdown {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with navigation -->
+    <header>
+        <div class="logo">
+            <h1>Fragrances & Co.</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="rhm.html">Home</a></li>
+                <li><a href="shop2.html">Shop</a></li>
+                <li><a href="about us.html">About Us</a></li>
+                <li><a href="communtiy.html">Community</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main shop content -->
+    <div class="shop-container">
+        <div class="shop-header">
+            <h1 class="shop-title">Our Fragrance Collection</h1>
+            <p class="shop-description">Discover our exquisite range of fragrances crafted to perfection. Each scent tells a unique story.</p>
+        </div>
+        
+        <!-- Shop controls -->
+        <div class="shop-controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search fragrances..." id="searchInput">
+            </div>
+            
+            <div class="filter-dropdown">
+                <button class="filter-button" id="filterButton">
+                    <i class="fas fa-filter"></i>
+                    Filter
+                </button>
+                <div class="filter-options" id="filterOptions">
+                    <div class="filter-option">
+                        <input type="checkbox" id="filter1" checked>
+                        <label for="filter1">All Products</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="filter2">
+                        <label for="filter2">Best Sellers</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="filter3">
+                        <label for="filter3">New Arrivals</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="filter4">
+                        <label for="filter4">Under 5000 ETB</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product grid -->
+        <div class="product-grid" id="productGrid">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </div>
+    
+    <!-- Quick view modal -->
+    <div class="quick-view-modal" id="quickViewModal">
+        <div class="quick-view-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <div class="quick-view-details" id="quickViewDetails">
+                <!-- Product details will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart preview -->
+    <div class="cart-preview-container">
+        <div class="cart-preview" onclick="window.location.href='cart.html'">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Velvet Vibe",
+                description: "Enigmatic Essence. For both day and night.",
+                price: 3999,
+                image: "download.jpeg",
+                rating: 4.5,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 2,
+                name: "Opulent Echo",
+                description: "Wear your confidence.",
+                price: 4657,
+                image: "a.jpeg",
+                rating: 4.2,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 3,
+                name: "Radiant Reverie",
+                description: "This is all you need for the summer.",
+                price: 5099.99,
+                image: "b.jpeg",
+                rating: 4.8,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 4,
+                name: "Whiff of Wonders",
+                description: "Leave them wondering with your fragrance.",
+                price: 5999.9,
+                image: "c.jpeg",
+                rating: 4.3,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 5,
+                name: "Velvet Vision",
+                description: "All the confidence you need in a bottle",
+                price: 3999,
+                image: "d.jpeg",
+                rating: 4.1,
+                isNew: false,
+                isBestSeller: false
+            },
+            {
+                id: 6,
+                name: "Scented Serene",
+                description: "The perfect fragrance for you.",
+                price: 5699.89,
+                image: "e.jpeg",
+                rating: 4.6,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 7,
+                name: "Dreamscape Duet",
+                description: "Remain in the dreamland with this fragrance",
+                price: 3999,
+                image: "f.jpeg",
+                rating: 4.4,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 8,
+                name: "Echo",
+                description: "Turn all the heads when you walk in the room.",
+                price: 2345.99,
+                image: "g.jpeg",
+                rating: 3.9,
+                isNew: false,
+                isBestSeller: false
+            },
+            {
+                id: 9,
+                name: "Radiant Reverie",
+                description: "Let your Fragrance do the talking.",
+                price: 5769.99,
+                image: "h.jpeg",
+                rating: 4.7,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 10,
+                name: "Serenity",
+                description: "Pure elegance in a bottle",
+                price: 3999,
+                image: "i.jpeg",
+                rating: 4.0,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 11,
+                name: "Aroma",
+                description: "Unlock new aroma. Unlock your new personality.",
+                price: 4999,
+                image: "j.jpeg",
+                rating: 4.2,
+                isNew: false,
+                isBestSeller: false
+            },
+            {
+                id: 12,
+                name: "Harmony",
+                description: "Harmonious time when wearing this fragrance.",
+                price: 5409.99,
+                image: "k.jpeg",
+                rating: 4.5,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 13,
+                name: "Celestial Being",
+                description: "Feel like the being that you are. Celestial.",
+                price: 5439.99,
+                image: "l.jpeg",
+                rating: 4.9,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 14,
+                name: "Angelica",
+                description: "The best product in the market right now",
+                price: 6789.99,
+                image: "m.jpeg",
+                rating: 4.7,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 15,
+                name: "Wings",
+                description: "Reach the heights of your potential. Leave the fragrance to us.",
+                price: 5679.99,
+                image: "n.jpeg",
+                rating: 4.3,
+                isNew: false,
+                isBestSeller: false
+            },
+            {
+                id: 16,
+                name: "Celestial Whimsy",
+                description: "The nicest fragrance.",
+                price: 4599.99,
+                image: "o.jpeg",
+                rating: 4.6,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 17,
+                name: "Serenity Symphony",
+                description: "The fragrance for any moment.",
+                price: 3499,
+                image: "p.jpeg",
+                rating: 4.1,
+                isNew: false,
+                isBestSeller: false
+            },
+            {
+                id: 18,
+                name: "Harmonious Hues",
+                description: "Only the best for you.",
+                price: 5499.99,
+                image: "q.jpeg",
+                rating: 4.4,
+                isNew: false,
+                isBestSeller: true
+            },
+            {
+                id: 19,
+                name: "Mystic Mirage",
+                description: "Gift to your loved ones.",
+                price: 4999.67,
+                image: "r.jpeg",
+                rating: 4.8,
+                isNew: true,
+                isBestSeller: false
+            },
+            {
+                id: 20,
+                name: "Lustrous Lyrics",
+                description: "The perfect fragrance for the winter.",
+                price: 3999,
+                image: "t.jpeg",
+                rating: 4.2,
+                isNew: false,
+                isBestSeller: false
+            }
+        ];
+
+        // DOM elements
+        const productGrid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterButton = document.getElementById('filterButton');
+        const filterOptions = document.getElementById('filterOptions');
+        const quickViewModal = document.getElementById('quickViewModal');
+        const quickViewDetails = document.getElementById('quickViewDetails');
+        const closeModal = document.getElementById('closeModal');
+        const cartCount = document.getElementById('cartCount');
+
+        // Initialize cart
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Display products
+        function displayProducts(productsToDisplay) {
+            productGrid.innerHTML = '';
+            
+            productsToDisplay.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Generate star rating
+                const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+                
+                productCard.innerHTML = `
+                    ${product.isNew ? '<span class="product-badge">New</span>' : ''}
+                    ${product.isBestSeller ? '<span class="product-badge" style="background-color: var(--secondary);">Bestseller</span>' : ''}
+                    
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                    </div>
+                    
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-rating">
+                            ${stars} <span>(${product.rating})</span>
+                        </div>
+                        <p class="product-price">${product.price.toLocaleString()} ETB</p>
+                        <button class="add-to-cart" data-id="${product.id}">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                `;
+                
+                productGrid.appendChild(productCard);
+            });
+            
+            // Add event listeners to "Add to Cart" buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+            
+            // Add event listeners to product images for quick view
+            document.querySelectorAll('.product-image-container').forEach(container => {
+                container.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productId = parseInt(productCard.querySelector('.add-to-cart').getAttribute('data-id'));
+                    showQuickView(productId);
+                });
+            });
+        }
+
+        // Add product to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Show success message
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: `${product.name} added to cart!`,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        // Show quick view modal
+        function showQuickView(productId) {
+            const product = products.find(p => p.id === productId);
+            const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+            
+            quickViewDetails.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <img src="${product.image}" alt="${product.name}" style="width: 100%; border-radius: 8px;">
+                    </div>
+                    <div>
+                        <h2 style="color: var(--primary); margin-top: 0;">${product.name}</h2>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                            <div style="color: var(--accent);">${stars}</div>
+                            <span style="color: var(--text-light);">${product.rating} (24 reviews)</span>
+                        </div>
+                        <p style="font-size: 1.5rem; color: var(--primary); font-weight: 700; margin: 1rem 0;">${product.price.toLocaleString()} ETB</p>
+                        <p style="color: var(--text-light); line-height: 1.6;">${product.description}</p>
+                        
+                        <div style="margin: 2rem 0;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Fragrance Notes</h3>
+                            <div style="display: flex; gap: 1rem;">
+                                <span style="background: #f0e6ff; color: var(--primary); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">Top: Citrus</span>
+                                <span style="background: #f0e6ff; color: var(--primary); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">Middle: Floral</span>
+                                <span style="background: #f0e6ff; color: var(--primary); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">Base: Woody</span>
+                            </div>
+                        </div>
+                        
+                        <button class="add-to-cart" data-id="${product.id}" style="background-color: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; transition: background-color 0.3s; margin-top: 1rem;">
+                            <i class="fas fa-cart-plus"></i> Add to Cart - ${product.price.toLocaleString()} ETB
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to the quick view "Add to Cart" button
+            quickViewDetails.querySelector('.add-to-cart').addEventListener('click', function() {
+                addToCart(productId);
+            });
+            
+            quickViewModal.style.display = 'flex';
+        }
+
+        // Filter products based on search and filters
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const showAll = document.getElementById('filter1').checked;
+            const showBestSellers = document.getElementById('filter2').checked;
+            const showNewArrivals = document.getElementById('filter3').checked;
+            const showUnder5000 = document.getElementById('filter4').checked;
+            
+            let filteredProducts = products;
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply other filters
+            if (!showAll) {
+                const filters = [];
+                if (showBestSellers) filters.push('isBestSeller');
+                if (showNewArrivals) filters.push('isNew');
+                if (showUnder5000) filters.push('price');
+                
+                filteredProducts = filteredProducts.filter(product => {
+                    if (showBestSellers && product.isBestSeller) return true;
+                    if (showNewArrivals && product.isNew) return true;
+                    if (showUnder5000 && product.price < 5000) return true;
+                    return false;
+                });
+            }
+            
+            displayProducts(filteredProducts);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        
+        filterButton.addEventListener('click', function() {
+            filterOptions.classList.toggle('show');
+        });
+        
+        closeModal.addEventListener('click', function() {
+            quickViewModal.style.display = 'none';
+        });
+        
+        quickViewModal.addEventListener('click', function(e) {
+            if (e.target === quickViewModal) {
+                quickViewModal.style.display = 'none';
+            }
+        });
+        
+        // Close filter options when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!filterButton.contains(e.target) && !filterOptions.contains(e.target)) {
+                filterOptions.classList.remove('show');
+            }
+        });
+
+        // Initialize the page
+        displayProducts(products);
+        updateCartCount();
+        window.addEventListener('storage', function(event) {
+    if (event.key === 'cart') {
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
+        updateCartCount();
+    }
+});
+    </script>
+</body>
+</html>

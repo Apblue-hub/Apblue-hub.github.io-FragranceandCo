@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Fragrances & Co.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #9c27b0;
+            --secondary: #e91e63;
+            --accent: #ff9800;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --background: #fff0f6;
+            --text-light: #777;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+        }
+        
+        /* Header styles */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo h1 {
+            color: var(--primary);
+            margin: 0;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 0;
+            display: block;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Main content */
+        .cart-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .cart-title {
+            text-align: center;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .cart-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        /* Cart items */
+        .cart-items {
+            margin-bottom: 40px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 50px;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .cart-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cart-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-right: 20px;
+            transition: transform 0.5s ease;
+        }
+        
+        .cart-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .item-details {
+            flex-grow: 1;
+        }
+        
+        .item-details h3 {
+            color: var(--primary);
+            margin: 0 0 5px;
+            font-size: 1.2rem;
+        }
+        
+        .item-details p {
+            color: var(--text-light);
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light);
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .quantity {
+            margin: 0 15px;
+            font-weight: 600;
+        }
+        
+        .item-price {
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 30px;
+            font-size: 1.1rem;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .remove-item {
+            background-color: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 10px;
+        }
+        
+        .remove-item:hover {
+            color: var(--secondary);
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        /* Cart summary */
+        .cart-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Action buttons */
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        
+        .cart-btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .back-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .checkout-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(156, 39, 176, 0.6);
+        }
+        
+        /* Recommended products */
+        .recommended {
+            margin-top: 50px;
+        }
+        
+        .recommended h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .recommended h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .recommended-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .recommended-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .recommended-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .recommended-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        
+        .recommended-item h3 {
+            color: var(--primary);
+            margin: 0 0 10px;
+            font-size: 1.1rem;
+        }
+        
+        .recommended-item .price {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .add-recommended {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .add-recommended:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+        
+        footer p {
+            margin: 0;
+        }
+        
+        /* Floating flowers */
+        .flower {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.8;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: -1;
+            color: var(--primary);
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cart-item img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .item-details, .item-price {
+                margin: 10px 0;
+            }
+            
+            .cart-actions {
+                flex-direction: column;
+            }
+            
+            .cart-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating flowers animation -->
+    <script>
+        function createFlower() {
+            const flower = document.createElement("div");
+            flower.innerHTML = "🌸";
+            flower.classList.add("flower");
+            
+            // Random position & size
+            flower.style.left = Math.random() * window.innerWidth + "px";
+            flower.style.fontSize = Math.random() * 20 + 20 + "px"; 
+            flower.style.animationDuration = Math.random() * 3 + 5 + "s"; 
+            flower.style.opacity = Math.random() * 0.5 + 0.3;
+            flower.style.top = "-50px";
+    
+            document.body.appendChild(flower);
+    
+            // Remove flower after animation
+            setTimeout(() => {
+                flower.remove();
+            }, 10000);
+        }
+    
+        // Create flowers every 500ms
+        setInterval(createFlower, 500);
+    </script>
+    
+    <!-- Header with navigation -->
+    <header>
+        <div class="logo">
+            <h1>Fragrances & Co.</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="rhm.html">Home</a></li>
+                <li><a href="shop2.html">Shop</a></li>
+                <li><a href="about us.html">About Us</a></li>
+                <li><a href="communtiy.html">Community</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main cart content -->
+    <div class="cart-container">
+        <h1 class="cart-title">Your Fragrance Journey</h1>
+        
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be dynamically inserted here -->
+        </div>
+        
+        <div class="cart-summary" id="cart-summary">
+            <!-- Cart summary will be dynamically inserted here -->
+        </div>
+        
+        <div class="cart-actions">
+            <button class="cart-btn back-btn" onclick="window.location.href='shop2.html'">
+                <i class="fas fa-arrow-left"></i> Continue Shopping
+            </button>
+            <button class="cart-btn checkout-btn" id="checkout-btn" onclick="window.location.href='checkout (1).html'">
+                <i class="fas fa-lock"></i> Secure Checkout
+            </button>
+        </div>
+        
+        <!-- Recommended products -->
+        <div class="recommended">
+            <h2>You Might Also Love</h2>
+            <div class="recommended-products" id="recommended-products">
+                <!-- Recommended products will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Fragrances & Co. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+       // Product data for recommendations
+const recommendedProducts = [
+    {
+        id: "101",  // Keeping as string for consistency
+        name: "Floral Dream",
+        price: 4599.99,
+        image: "images/download.jpeg",
+        description: "A bouquet of spring flowers in a bottle"
+    },
+    {
+        id: "102",
+        name: "Citrus Splash",
+        price: 3999.99,
+        image: "images/a.jpeg",
+        description: "Zesty and refreshing for everyday wear"
+    },
+    {
+        id: "103",
+        name: "Velvet Twilight",
+        price: 5299.99,
+        image: "images/b.jpeg",
+        description: "Mysterious and alluring evening fragrance"
+    },
+    {
+        id: "104",
+        name: "Vanilla Whisper",
+        price: 4899.99,
+        image: "images/c.jpeg",
+        description: "Sweet and comforting like a warm embrace"
+    }
+];
+
+// Display cart items
+function displayCartItems() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsElement = document.getElementById('cart-items');
+    const cartSummaryElement = document.getElementById('cart-summary');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    // Clear previous content
+    cartItemsElement.innerHTML = '';
+    cartSummaryElement.innerHTML = '';
+
+    if (cart.length === 0) {
+        cartItemsElement.innerHTML = `
+            <div class="empty-cart">
+                <i class="fas fa-shopping-bag" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <p>Your fragrance journey awaits!</p>
+                <p>Your cart is currently empty</p>
+            </div>
+        `;
+        checkoutBtn.style.display = 'none';
+        return;
+    } else {
+        checkoutBtn.style.display = 'flex';
+    }
+
+    let itemsHTML = '';
+    let subtotal = 0;
+
+    cart.forEach(item => {
+        const quantity = item.quantity || 1;
+        const itemTotal = item.price * quantity;
+        subtotal += itemTotal;
+
+        itemsHTML += `
+            <div class="cart-item" data-id="${item.id}">
+                <img src="${item.image || 'images/default-product.jpg'}" alt="${item.name}" onerror="this.src='images/default-product.jpg'">
+                <div class="item-details">
+                    <h3>${item.name}</h3>
+                    <p>${item.description || 'Luxury fragrance for your special moments'}</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${quantity - 1})">-</button>
+                        <span class="quantity">${quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${quantity + 1})">+</button>
+                    </div>
+                </div>
+                <div class="item-price">${item.price.toFixed(2)} ETB</div>
+                <button class="remove-item" onclick="removeItem('${item.id}')">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        `;
+    });
+
+    cartItemsElement.innerHTML = itemsHTML;
+    
+    // Calculate total
+    const total = subtotal;
+    
+    cartSummaryElement.innerHTML = `
+        <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>${subtotal.toFixed(2)} ETB</span>
+        </div>
+        <div class="summary-row">
+            <span>Shipping:</span>
+            <span>Free</span>
+        </div>
+        <div class="summary-row total">
+            <span>Total:</span>
+            <span>${total.toFixed(2)} ETB</span>
+        </div>
+    `;
+    
+    // Display recommended products
+    displayRecommendedProducts();
+}
+
+// Update item quantity
+function updateQuantity(productId, newQuantity) {
+    if (newQuantity < 1) {
+        removeItem(productId);
+        return;
+    }
+    
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.map(item => {
+        if (String(item.id) === String(productId)) {  // Ensure both are strings for comparison
+            return { ...item, quantity: newQuantity };
+        }
+        return item;
+    });
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems();
+    
+    // Show notification
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Quantity updated',
+        showConfirmButton: false,
+        timer: 1000
+    });
+}
+
+// Remove item from cart
+function removeItem(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Find the item to be removed for the notification
+    const itemToRemove = cart.find(item => String(item.id) === String(productId));
+    
+    // Filter out the item to be removed
+    cart = cart.filter(item => String(item.id) !== String(productId));
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Animate removal
+    const itemElement = document.querySelector(`.cart-item[data-id="${productId}"]`);
+    if (itemElement) {
+        itemElement.style.transform = 'translateX(100%)';
+        itemElement.style.opacity = '0';
+        setTimeout(() => {
+            displayCartItems();
+        }, 500);
+    } else {
+        displayCartItems();
+    }
+    
+    // Show notification
+    if (itemToRemove) {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `${itemToRemove.name} removed`,
+            showConfirmButton: false,
+            timer: 1000
+        });
+    }
+}
+function migrateCartData() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const migratedCart = cart.map(item => ({
+        id: item.id || '',
+        name: item.name || 'Unnamed Product',
+        price: Number(item.price) || 0,
+        image: item.image || 'images/default-product.jpg',
+        quantity: Number(item.quantity) || 1
+    }));
+    localStorage.setItem('cart', JSON.stringify(migratedCart));
+}
+
+// Call this when initializing your cart
+migrateCartData();
+// Display recommended products
+function displayRecommendedProducts() {
+    const recommendedElement = document.getElementById('recommended-products');
+    let recommendedHTML = '';
+    
+    recommendedProducts.forEach(product => {
+        recommendedHTML += `
+            <div class="recommended-item">
+                <img src="${product.image}" alt="${product.name}" onerror="this.src='images/default-product.jpg'">
+                <h3>${product.name}</h3>
+                <p class="price">${product.price.toFixed(2)} ETB</p>
+                <p>${product.description}</p>
+                <button class="add-recommended" onclick="addRecommended('${product.id}')">
+                    <i class="fas fa-plus"></i> Add to Cart
+                </button>
+            </div>
+        `;
+    });
+    
+    recommendedElement.innerHTML = recommendedHTML;
+}
+
+// Add recommended product to cart
+function addRecommended(productId) {
+    const product = recommendedProducts.find(p => String(p.id) === String(productId));
+    if (!product) return;
+    
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // Product data for recommendations - ensure all have required properties
+const recommendedProducts = [
+    {
+        id: "101",
+        name: "Floral Dream",
+        price: 4599.99,
+        image: "images/download.jpeg",
+        description: "A bouquet of spring flowers in a bottle"
+    },
+    {
+        id: "102",
+        name: "Citrus Splash",
+        price: 3999.99,
+        image: "images/a.jpeg",
+        description: "Zesty and refreshing for everyday wear"
+    },
+    {
+        id: "103",
+        name: "Velvet Twilight",
+        price: 5299.99,
+        image: "images/b.jpeg",
+        description: "Mysterious and alluring evening fragrance"
+    },
+    {
+        id: "104",
+        name: "Vanilla Whisper",
+        price: 4899.99,
+        image: "images/c.jpeg",
+        description: "Sweet and comforting like a warm embrace"
+    }
+];
+
+// Display recommended products with proper error handling
+function displayRecommendedProducts() {
+    const recommendedElement = document.getElementById('recommended-products');
+    if (!recommendedElement) return; // Exit if element not found
+    
+    let recommendedHTML = '';
+    
+    recommendedProducts.forEach(product => {
+        // Validate product data before displaying
+        const validatedProduct = {
+            id: product.id || 'unknown',
+            name: product.name || 'Unnamed Product',
+            price: Number(product.price) || 0,
+            image: product.image || 'images/default-product.jpg',
+            description: product.description || 'Premium fragrance product'
+        };
+        
+        recommendedHTML += `
+            <div class="recommended-item">
+                <img src="${validatedProduct.image}" alt="${validatedProduct.name}" 
+                     onerror="this.src='images/default-product.jpg'">
+                <h3>${validatedProduct.name}</h3>
+                <p class="price">${validatedProduct.price.toFixed(2)} ETB</p>
+                <p>${validatedProduct.description}</p>
+                <button class="add-recommended" data-id="${validatedProduct.id}">
+                    <i class="fas fa-plus"></i> Add to Cart
+                </button>
+            </div>
+        `;
+    });
+    
+    recommendedElement.innerHTML = recommendedHTML;
+    
+    // Add event listeners properly
+    document.querySelectorAll('.add-recommended').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            addRecommended(productId);
+        });
+    });
+}
+
+// Improved addRecommended function
+function addRecommended(productId) {
+    if (!productId) {
+        console.error('No product ID provided');
+        return;
+    }
+    
+    // Find product with proper error handling
+    const product = recommendedProducts.find(p => String(p.id) === String(productId));
+    if (!product) {
+        console.error('Product not found with ID:', productId);
+        Swal.fire({
+            icon: 'error',
+            title: 'Product Not Available',
+            text: 'This product could not be added to your cart',
+            timer: 1500
+        });
+        return;
+    }
+    
+    // Prepare validated product data
+    const validatedProduct = {
+        id: product.id,
+        name: product.name || 'Unnamed Product',
+        price: Number(product.price) || 0,
+        image: product.image || 'images/default-product.jpg',
+        quantity: 1
+    };
+    
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Check if product already exists in cart
+    const existingItemIndex = cart.findIndex(item => String(item.id) === String(productId));
+    
+    if (existingItemIndex !== -1) {
+        // Update quantity if already in cart
+        cart[existingItemIndex].quantity = (Number(cart[existingItemIndex].quantity) || 1) + 1;
+    } else {
+        // Add new item to cart
+        cart.push(validatedProduct);
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems();
+    
+    // Show success message
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `${validatedProduct.name} added to cart!`,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+// Initialize the page with error handling
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        // Initialize cart if it doesn't exist
+        if (!localStorage.getItem('cart')) {
+            localStorage.setItem('cart', JSON.stringify([]));
+        }
+        
+        displayCartItems();
+        displayRecommendedProducts();
+        
+        // Create initial flowers
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFlower, i * 300);
+        }
+    } catch (error) {
+        console.error('Initialization error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Page Loading Error',
+            text: 'There was a problem loading the page. Please try again.',
+        });
+    }
+});
+    
+    // Check if product already in cart
+    const existingItemIndex = cart.findIndex(item => String(item.id) === String(productId));
+    
+    if (existingItemIndex !== -1) {
+        cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+        });
+    }
+    function addRecommended(productId) {
+    const product = recommendedProducts.find(p => String(p.id) === String(productId));
+    if (!product) return;
+    
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Validate product data before adding
+    const validatedProduct = {
+        id: product.id || '',
+        name: product.name || 'Unnamed Product',
+        price: Number(product.price) || 0,
+        image: product.image || 'images/default-product.jpg',
+        quantity: 1
+    };
+    
+    // Check if product already in cart
+    const existingItemIndex = cart.findIndex(item => String(item.id) === String(productId));
+    
+    if (existingItemIndex !== -1) {
+        cart[existingItemIndex].quantity = (Number(cart[existingItemIndex].quantity) || 1) + 1;
+    } else {
+        cart.push(validatedProduct);
+    }
+    // Example of checking image paths
+recommendedProducts.forEach(product => {
+    const img = new Image();
+    img.src = product.image;
+    img.onerror = () => {
+        console.error('Image not found:', product.image);
+        product.image = 'images/default-product.jpg';
+    };
+});
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems();
+    
+    // Show success message
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `${validatedProduct.name} added to cart!`,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems();
+    
+    // Show success message
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `${product.name} added to cart!`,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize cart if it doesn't exist
+    if (!localStorage.getItem('cart')) {
+        localStorage.setItem('cart', JSON.stringify([]));
+    }
+    
+    displayCartItems();
+    
+    // Create initial flowers
+    for (let i = 0; i < 5; i++) {
+        setTimeout(createFlower, i * 300);
+    }
+});
+
+// Make sure these functions are available globally
+window.updateQuantity = updateQuantity;
+window.removeItem = removeItem;
+window.addRecommended = addRecommended;
+console.log("Cart contents:", JSON.parse(localStorage.getItem('cart')));
+console.log('Recommended Products:', recommendedProducts);
+console.log('Current Cart:', JSON.parse(localStorage.getItem('cart')));
+    </script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Fragrances & Co.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #9c27b0;
+            --secondary: #e91e63;
+            --accent: #ff9800;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --background: #fff0f6;
+            --text-light: #777;
+        }
+        
+        body {
+            background-color: var(--background);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+        
+        
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo h1 {
+            color: var(--primary);
+            margin: 0;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 15px 20px;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        
+        .about-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .about-section h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .about-section p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        
+        .team-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+        
+        .team-section h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .team-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .team-member img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+        
+        .team-member-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .team-member-info h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .team-member-info h4 {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .team-member-info p {
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        
+        .contact-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .contact-section h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .contact-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .contact-card {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.05) 0%, rgba(233, 30, 99, 0.05) 100%);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid rgba(156, 39, 176, 0.1);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .contact-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .contact-card p, .contact-card a {
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+        
+        .contact-card a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .contact-card a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+        
+        footer p {
+            margin: 0;
+        }
+        
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav a {
+                padding: 10px 0;
+            }
+            
+            .team-member {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .team-member img {
+                margin-bottom: 20px;
+            }
+        }
+        
+.chat-bot-container {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 350px;
+    max-width: 90%;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transform: translateY(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    border: 1px solid #e0e0e0;
+}
+
+.chat-bot-container.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.chat-header {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Fragrances & Co.</h1>
+        </div>
+        <nav>
+            <a href="rhm.html">Home</a>
+            <a href="shop2.html">Shop</a>
+            <a href="about us.html">About Us</a>
+            <a href="communtiy.html">Community</a>
+            <a href="admin.html">Admin</a>
+            <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+        </nav>
+    </header>
+
+    
+    <div class="main-container">
+        <div class="page-header">
+            <h1>Our Story</h1>
+            <p>Discover the passion behind Fragrances & Co.</p>
+        </div>
+        
+        
+        <section class="about-section">
+            <h2>Welcome to Fragrances & Co.</h2>
+            <p>
+                At Fragrances & Co., we're passionate about providing high-quality perfumes at affordable prices. 
+                Our mission is to make luxury fragrances accessible to everyone while ensuring an exceptional 
+                shopping experience that delights all your senses.
+            </p>
+            <p>
+                Founded in 2025 by the SIDER start-up team, we began as a small group of fragrance enthusiasts 
+                with a dream to revolutionize how people discover and purchase perfumes. Today, we've grown into 
+                a trusted destination for fragrance lovers across Ethiopia and beyond.
+            </p>
+            <p>
+                What sets us apart is our commitment to quality, authenticity, and customer satisfaction. 
+                Each fragrance in our collection is carefully curated to ensure it meets our high standards 
+                before reaching you.
+            </p>
+        </section>
+        
+        
+        <section class="team-section">
+            <h2>Meet Our Team</h2>
+            <div class="team-member">
+                <img src="eman.jpg" alt="SIDER Team">
+                <div class="team-member-info">
+                    <h3>The SIDER Team</h3>
+                    <h4>Founders & Visionaries</h4>
+                    <p>
+                        We are a dedicated group of students-turned-entrepreneurs who believe that everyone 
+                        deserves to experience the transformative power of fragrance. Our team combines 
+                        expertise in business, technology, and fragrance composition to bring you the best 
+                        products on the market.
+                    </p>
+                    <p>
+                        "We're committed to providing our customers with not just products, but experiences 
+                        that elevate everyday moments into something extraordinary."
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        
+        <section class="contact-section">
+            <h2>Talk To Us</h2>
+            <div class="contact-methods">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p>Have questions or special requests?</p>
+                    <a href="mailto:fragranceandco.addis@gmail.com">fragranceandco.addis@gmail.com</a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p>Available 9AM-5PM, Monday to Friday</p>
+                    <a href="tel:+251967938599">+251 967 93 8599</a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Live Chat</h3>
+                    <p>Get instant help from our team</p>
+                    <a href="#" id="startChatBtn">Start Chat</a>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="chat-bot-container" id="chatBotContainer">
+        <div class="chat-header">
+            <h3>Fragrances & Co. Support</h3>
+            <button class="close-chat" id="closeChat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    
+    const startChatBtn = document.getElementById('startChatBtn');
+    const chatBotContainer = document.getElementById('chatBotContainer');
+    const closeChat = document.getElementById('closeChat');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendMessage = document.getElementById('sendMessage');
+
+    
+    startChatBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        chatBotContainer.classList.add('open');
+        
+        
+        if (chatMessages.children.length === 0) {
+            addBotMessage("Hello! 👋 Welcome to Fragrances & Co. support. How can I help you today?");
+        }
+    });
+
+    
+    closeChat.addEventListener('click', function() {
+        chatBotContainer.classList.remove('open');
+    });
+
+    
+    function sendUserMessage() {
+        const message = chatInput.value.trim();
+        if (message) {
+            addUserMessage(message);
+            chatInput.value = '';
+            
+            
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing-indicator';
+            typingIndicator.innerHTML = `
+                <span></span>
+                <span></span>
+                <span></span>
+            `;
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            
+            setTimeout(() => {
+                chatMessages.removeChild(typingIndicator);
+                handleBotResponse(message);
+            }, 1500);
+        }
+    }
+    
+    sendMessage.addEventListener('click', sendUserMessage);
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendUserMessage();
+        }
+    });
+
+    
+    function addUserMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message user';
+        messageDiv.innerHTML = `
+            <div class="message-content">${message}</div>
+            <div class="message-time">${getCurrentTime()}</div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+
+    function addBotMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot';
+        messageDiv.innerHTML = `
+            <div class="message-content">${message}</div>
+            <div class="message-time">${getCurrentTime()}</div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    
+    function handleBotResponse(userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+        let response;
+        
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+            response = "Hello there! 😊 How can I assist you with our fragrances today?";
+        } 
+        else if (lowerMessage.includes('order') || lowerMessage.includes('track')) {
+            response = "For order tracking, please provide your order number. You can also check your order status in your account dashboard.";
+        }
+        else if (lowerMessage.includes('return') || lowerMessage.includes('exchange')) {
+            response = "Our return policy allows exchanges within 30 days of purchase. Please visit our Returns page for more details.";
+        }
+        else if (lowerMessage.includes('recommend') || lowerMessage.includes('suggest')) {
+            response = "Based on your preferences, I'd recommend our best-selling 'Velvet Twilight' for evenings or 'Citrus Splash' for daytime freshness. Would you like more suggestions?";
+        }
+        else if (lowerMessage.includes('thank')) {
+            response = "You're welcome! Is there anything else I can help you with?";
+        }
+        else if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
+            response = "Thank you for chatting with us! Have a wonderful day and enjoy your fragrances! 🌸";
+        }
+        else {
+            response = "I'm here to help with any questions about our fragrances. You can ask about products, orders, or recommendations!";
+        }
+        
+        addBotMessage(response);
+    }
+
+    
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+});
+    </script>
+
+    <footer>
+        <p>&copy; 2025 Fragrances & Co. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
+     

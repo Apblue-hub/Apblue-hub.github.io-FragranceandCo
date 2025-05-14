@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7b2cbf;
+            --secondary: #e0aaff;
+            --accent: #ff9e00;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #38b000;
+            --danger: #ff4d6d;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0c5dc 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Floating bubbles background */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(123, 44, 191, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                bottom: -100px;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                bottom: 100%;
+            }
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #7b2cbf, #ff9e00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            opacity: 0.8;
+        }
+        
+        /* Auth section */
+        .auth-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 500px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .auth-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .auth-section h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.2);
+            outline: none;
+            background-color: white;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            cursor: pointer;
+            color: #adb5bd;
+            transition: color 0.3s;
+        }
+        
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: #6a1b9a;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d89cff;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background-color: #e68a00;
+        }
+        
+        /* Community content */
+        .community-content {
+            display: none;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .welcome-message {
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.1) 0%, rgba(224, 170, 255, 0.1) 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-left: 5px solid var(--primary);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(123, 44, 191, 0.2); }
+            100% { box-shadow: 0 0 0 15px rgba(123, 44, 191, 0); }
+        }
+        
+        .welcome-message h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-message p {
+            color: var(--dark);
+            opacity: 0.8;
+        }
+        
+        /* Review form */
+        .review-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .review-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .rating-stars input[type="radio"] {
+            display: none;
+        }
+        
+        .rating-stars label {
+            font-size: 2rem;
+            color: #e9ecef;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: #e9ecef;
+        }
+        
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label,
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: var(--accent);
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Reviews display */
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .review-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .review-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .review-date {
+            font-size: 0.8rem;
+            color: #adb5bd;
+        }
+        
+        .review-type {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--secondary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-rating {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .review-text {
+            line-height: 1.6;
+            color: var(--dark);
+        }
+        
+        /* User profile */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .reviews-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: var(--success);
+        }
+        
+        .toast.error {
+            background: var(--danger);
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.logout-btn:hover {
+    background: var(--danger);
+    color: white;
+}
+    </style>
+</head>
+<body>
+<button class="logout-btn" id="logout-btn" style="display: none;">
+    <i class="fas fa-sign-out-alt"></i> Log Out
+</button>
+    
+    <div class="bubbles" id="bubbles"></div>
+    <div class="container">
+        <div class="header">
+            <h1>Community Hub</h1>
+            <p>Share your thoughts, connect with others, and help us improve</p>
+        </div>
+        <div class="auth-section" id="auth-section">
+            <h2>Join Our Community</h2>
+            
+            <div class="form-group">
+                <label for="user-email">Email Address</label>
+                <input type="email" id="user-email" class="form-control" placeholder="your@email.com" required>
+            </div>
+            
+            <div class="form-group" id="password-group" style="display: none;">
+                <label for="user-password">Password</label>
+                <input type="password" id="user-password" class="form-control" placeholder="Enter your password" required>
+                <i class="fas fa-eye password-toggle" id="toggle-password"></i>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn btn-primary" id="auth-button">
+                    <span id="auth-button-text">Continue with Email</span>
+                    <span class="spinner" id="auth-spinner" style="display: none;"></span>
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <p>By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
+        
+        <!-- Community content (shown after auth) -->
+        <div class="community-content" id="community-content">
+            <!-- Welcome message -->
+            <div class="welcome-message">
+                <h2>Welcome back, <span id="welcome-email"></span>!</h2>
+                <p>We're thrilled to have you here. Share your experiences with our products and services.</p>
+            </div>
+            
+            <!-- User profile -->
+            <div class="user-profile">
+                <div class="avatar" id="user-avatar">JD</div>
+                <div>
+                    <h3 id="user-display-name">John Doe</h3>
+                    <p id="user-join-date">Member since June 2023</p>
+                </div>
+            </div>
+            
+            <!-- Review form -->
+            <div class="review-form">
+                <h3>Share Your Experience</h3>
+                
+                <div class="form-group">
+                    <label>What would you like to share?</label>
+                    <select id="review-type" class="form-control">
+                        <option value="product">Product Review</option>
+                        <option value="service">Service Feedback</option>
+                        <option value="suggestion">Improvement Suggestion</option>
+                        <option value="general">General Comment</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Rating</label>
+                    <div class="rating-stars">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Review</label>
+                    <textarea id="review-text" class="form-control" placeholder="Tell us about your experience..."></textarea>
+                </div>
+                
+                <button class="btn btn-accent" id="submit-review">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </div>
+            
+            <!-- Reviews display -->
+            <h3 style="margin-top: 2rem;">Community Reviews</h3>
+            <div class="reviews-container" id="reviews-container">
+                <!-- Reviews will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Success! Your review has been submitted.</span>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const authSection = document.getElementById('auth-section');
+        const communityContent = document.getElementById('community-content');
+        const authButton = document.getElementById('auth-button');
+        const authButtonText = document.getElementById('auth-button-text');
+        const authSpinner = document.getElementById('auth-spinner');
+        const userEmailInput = document.getElementById('user-email');
+        const passwordGroup = document.getElementById('password-group');
+        const userPasswordInput = document.getElementById('user-password');
+        const togglePassword = document.getElementById('toggle-password');
+        const welcomeEmail = document.getElementById('welcome-email');
+        const userAvatar = document.getElementById('user-avatar');
+        const userDisplayName = document.getElementById('user-display-name');
+        const userJoinDate = document.getElementById('user-join-date');
+        const submitReview = document.getElementById('submit-review');
+        const reviewsContainer = document.getElementById('reviews-container');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const bubblesContainer = document.getElementById('bubbles');
+        
+        // Create bubbles background
+        function createBubbles() {
+            const bubbleCount = 20;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // Random properties
+                const size = Math.random() * 100 + 50;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${posX}%`;
+                bubble.style.animationDelay = `${delay}s`;
+                bubble.style.animationDuration = `${duration}s`;
+                
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Toggle password visibility
+        togglePassword.addEventListener('click', function() {
+            const type = userPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            userPasswordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+        
+        // Check if user is already logged in
+        function checkAuthStatus() {
+            const user = JSON.parse(localStorage.getItem('communityUser'));
+            if (user) {
+                showCommunityContent(user);
+            }
+        }
+        
+        // Show community content after auth
+        function showCommunityContent(user) {
+            authSection.style.display = 'none';
+            communityContent.style.display = 'block';
+            
+            // Set user info
+            welcomeEmail.textContent = user.email;
+            userAvatar.textContent = getInitials(user.email);
+            userDisplayName.textContent = user.email.split('@')[0];
+            userJoinDate.textContent = `Member since ${new Date(user.joined).toLocaleDateString()}`;
+            
+            // Load reviews
+            displayReviews();
+        }
+        
+        // Get initials from email
+        function getInitials(email) {
+            return email.substring(0, 2).toUpperCase();
+        }
+        
+        // Display all reviews
+        function displayReviews() {
+            const reviews = JSON.parse(localStorage.getItem('communityReviews')) || [];
+            reviewsContainer.innerHTML = '';
+            
+            if (reviews.length === 0) {
+                reviewsContainer.innerHTML = `
+                    <div class="review-card" style="grid-column: 1 / -1; text-align: center;">
+                        <p>No reviews yet. Be the first to share your thoughts!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            reviews.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                
+                // Create stars
+                let stars = '';
+                for (let i = 1; i <= 5; i++) {
+                    stars += i <= review.rating ? '★' : '☆';
+                }
+                
+                reviewCard.innerHTML = `
+                    <div class="review-header">
+                        <div class="review-author">${review.author.split('@')[0]}</div>
+                        <div class="review-date">${review.date}</div>
+                    </div>
+                    <span class="review-type">${getReviewType(review.type)}</span>
+                    <div class="review-rating">${stars}</div>
+                    <p class="review-text">${review.text}</p>
+                `;
+                
+                reviewsContainer.appendChild(reviewCard);
+            });
+        }
+        
+        // Get review type display text
+        function getReviewType(type) {
+            const types = {
+                product: 'Product Review',
+                service: 'Service Feedback',
+                suggestion: 'Improvement Suggestion',
+                general: 'General Comment'
+            };
+            return types[type] || type;
+        }
+        
+        // Handle authentication
+        authButton.addEventListener('click', async function() {
+            const email = userEmailInput.value.trim();
+            
+            // Validate email
+            if (!validateEmail(email)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Show loading state
+            authButtonText.textContent = 'Please wait...';
+            authSpinner.style.display = 'inline-block';
+            authButton.disabled = true;
+            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Check if user exists
+            const users = JSON.parse(localStorage.getItem('communityUsers')) || [];
+            const existingUser = users.find(u => u.email === email);
+            
+            if (existingUser) {
+                // Existing user - check password
+                if (!passwordGroup.style.display || passwordGroup.style.display === 'none') {
+                    passwordGroup.style.display = 'block';
+                    authButtonText.textContent = 'Log In';
+                    authSpinner.style.display = 'none';
+                    authButton.disabled = false;
+                    return;
+                }
+                
+                const password = userPasswordInput.value;
+                if (password !== existingUser.password) {
+                    showToast('Incorrect password', 'error');
+                    authButtonText.textContent = 'Log In';
+                    authSpinner.style.display = 'none';
+                    authButton.disabled = false;
+                    return;
+                }
+                
+                // Successful login
+                localStorage.setItem('communityUser', JSON.stringify(existingUser));
+                showCommunityContent(existingUser);
+                showToast('Welcome back!', 'success');
+            } else {
+                // New user - create password
+                if (!passwordGroup.style.display || passwordGroup.style.display === 'none') {
+                    passwordGroup.style.display = 'block';
+                    authButtonText.textContent = 'Create Account';
+                    authSpinner.style.display = 'none';
+                    authButton.disabled = false;
+                    return;
+                }
+                
+                const password = userPasswordInput.value;
+                if (password.length < 6) {
+                    showToast('Password must be at least 6 characters', 'error');
+                    authButtonText.textContent = 'Create Account';
+                    authSpinner.style.display = 'none';
+                    authButton.disabled = false;
+                    return;
+                }
+                
+                // Create new user
+                const newUser = {
+                    email,
+                    password,
+                    joined: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('communityUsers', JSON.stringify(users));
+                localStorage.setItem('communityUser', JSON.stringify(newUser));
+                showCommunityContent(newUser);
+                showToast('Account created successfully!', 'success');
+            }
+        });
+        
+        // Handle review submission
+        submitReview.addEventListener('click', function() {
+            const user = JSON.parse(localStorage.getItem('communityUser'));
+            if (!user) {
+                showToast('Please log in to submit a review', 'error');
+                return;
+            }
+            
+            const reviewType = document.getElementById('review-type').value;
+            const reviewText = document.getElementById('review-text').value.trim();
+            const rating = document.querySelector('input[name="rating"]:checked')?.value || 0;
+            
+            if (!reviewText) {
+                showToast('Please enter your review text', 'error');
+                return;
+            }
+            
+            if (rating === 0) {
+                showToast('Please select a rating', 'error');
+                return;
+            }
+            
+            // Create review
+            const review = {
+                id: Date.now(),
+                author: user.email,
+                type: reviewType,
+                text: reviewText,
+                rating: parseInt(rating),
+                date: new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+            
+            // Save review
+            const reviews = JSON.parse(localStorage.getItem('communityReviews')) || [];
+            reviews.unshift(review);
+            localStorage.setItem('communityReviews', JSON.stringify(reviews));
+            
+            // Clear form
+            document.getElementById('review-text').value = '';
+            document.querySelector('input[name="rating"]:checked').checked = false;
+            
+            // Update display
+            displayReviews();
+            showToast('Thank you for your review!', 'success');
+            
+            // Scroll to reviews
+            reviewsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Email validation
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createBubbles();
+            checkAuthStatus();
+            
+            // Auto-focus email input
+            userEmailInput.focus();
+        });
+        // Show/hide logout button
+function toggleLogoutButton(show) {
+    const logoutBtn = document.getElementById('logout-btn');
+    logoutBtn.style.display = show ? 'block' : 'none';
+}
+
+// Logout function
+function logoutUser() {
+    localStorage.removeItem('communityUser');
+    authSection.style.display = 'block';
+    communityContent.style.display = 'none';
+    passwordGroup.style.display = 'none';
+    userEmailInput.value = '';
+    userPasswordInput.value = '';
+    authButtonText.textContent = 'Continue with Email';
+    toggleLogoutButton(false);
+    showToast('You have been logged out', 'success');
+    userEmailInput.focus();
+}
+
+// Add event listener for logout button (add this at the end of your script)
+document.getElementById('logout-btn').addEventListener('click', logoutUser);
+function showCommunityContent(user) {
+    authSection.style.display = 'none';
+    communityContent.style.display = 'block';
+    toggleLogoutButton(true); // Add this line
+    
+    // Rest of your existing code...
+    welcomeEmail.textContent = user.email;
+    userAvatar.textContent = getInitials(user.email);
+    userDisplayName.textContent = user.email.split('@')[0];
+    userJoinDate.textContent = `Member since ${new Date(user.joined).toLocaleDateString()}`;
+    
+    // Load reviews
+    displayReviews();
+}
+function checkAuthStatus() {
+    const user = JSON.parse(localStorage.getItem('communityUser'));
+    if (user) {
+        showCommunityContent(user);
+        toggleLogoutButton(true); // Add this line
+    }
+}
+    </script>
+</body>
+</html>
